@@ -42,4 +42,14 @@ public class FileServiceImpl implements FileService {
             throw new FileAccessException(e);
         }
     }
+
+    @Override
+    public boolean removeFile(String id) {
+        try {
+            val path = Paths.get(uploadPath).resolve(id);
+            return Files.deleteIfExists(path);
+        } catch (IOException e) {
+            throw new FileAccessException(e);
+        }
+    }
 }
