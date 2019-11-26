@@ -67,6 +67,9 @@ public class AutoRepositoryJdbcImpl implements AutoRepository {
                 return null;
             } else {
                 String previousImageUrl = getImageUrl(model.getId()).orElse(null);
+                if (model.getImageUrl() == null) {
+                    model.setImageUrl(previousImageUrl);
+                }
                 template.update(ds, "UPDATE autos SET name = ?, description = ?, imageUrl = ? WHERE id = ?;", stmt -> {
                     stmt.setString(1, model.getName());
                     stmt.setString(2, model.getDescription());
