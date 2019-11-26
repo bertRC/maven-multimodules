@@ -40,6 +40,6 @@ public class AutoServiceImpl implements AutoService {
 
     @Override
     public List<AutoModel> search(String text) {
-        return null;
+        return repository.search(text);
     }
 }
