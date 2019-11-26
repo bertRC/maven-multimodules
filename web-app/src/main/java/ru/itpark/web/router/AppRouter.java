@@ -10,6 +10,7 @@ import ru.itpark.web.repository.AutoRepositoryJdbcImpl;
 import ru.itpark.web.service.AutoService;
 import ru.itpark.web.service.AutoServiceImpl;
 import ru.itpark.web.service.FileServiceImpl;
+import ru.itpark.web.util.ResourcesPaths;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -18,23 +19,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 import java.io.IOException;
+import java.util.regex.Pattern;
 
 public class AppRouter implements Router {
-    // Container
-    // Map<Class, Object> <- object.getClass()
-    // Reflections -> Type
-    // .newInstance
-    // JNDI
-    // Factory Class -> method.invoke() <- Component
     private AutoService autoService;
     private FileServiceImpl fileService;
 
-    // без контейнера - сами тут вручную настраиваем и всё инициализируем
+    public static final Pattern urlPattern = Pattern.compile("^/(.+)/(.*)$");
+
     public void init() {
         try {
             val context = new InitialContext();
-            val dataSource = (DataSource) context.lookup("java:/comp/env/jdbc/db");
-            val uploadPath = System.getenv("UPLOAD_PATH");
+            val dataSource = (DataSource) context.lookup(ResourcesPaths.dbPath);
+            val uploadPath = System.getenv(ResourcesPaths.uploadPath);
             fileService = new FileServiceImpl(uploadPath);
             autoService = new AutoServiceImpl(new AutoRepositoryJdbcImpl(dataSource, new JdbcTemplate()), fileService);
         } catch (NamingException e) {
@@ -52,14 +49,16 @@ public class AppRouter implements Router {
                 if (request.getMethod().equals("GET")) {
                     val items = autoService.getAll();
                     request.setAttribute("items", items);
-                    request.getRequestDispatcher("/WEB-INF/frontpage.jsp").forward(request, response);
+                    request.getRequestDispatcher(ResourcesPaths.frontpageJsp).forward(request, response);
                     return;
                 }
 
                 if (request.getMethod().equals("POST")) {
+                    request.setCharacterEncoding("UTF-8");
                     val name = request.getParameter("name");
+                    val description = request.getParameter("description");
                     val part = request.getPart("image");
-                    autoService.save(new AutoModel(0, name, null, null), part);
+                    autoService.save(new AutoModel(0, name, description, null), part);
                     response.sendRedirect(rootUrl);
                     return;
                 }
@@ -67,23 +66,30 @@ public class AppRouter implements Router {
                 throw new NotFoundException();
             }
 
-            // Sample: /details/{id}
-            // TODO: обычно парсинг делают через регулярные выражения, но тут простой вариант
-            if (url.startsWith("/details/")) {
+            val matcher = urlPattern.matcher(url);
+            String queryName;
+            String attribute;
+            // url template: "/queryName/attribute"
+            if (matcher.find()) {
+                queryName = matcher.group(1);
+                attribute = matcher.group(2);
+            } else return;
+
+            if (queryName.equals("details")) {
                 if (request.getMethod().equals("GET")) {
-                    val id = Integer.parseInt(url.substring("/details/".length()));
+                    val id = Integer.parseInt(attribute);
                     val item = autoService.getById(id);
                     request.setAttribute("item", item);
-                    request.getRequestDispatcher("/WEB-INF/details.jsp").forward(request, response);
+                    request.getRequestDispatcher(ResourcesPaths.detailsJsp).forward(request, response);
                     return;
                 }
 
                 throw new NotFoundException();
             }
 
-            if (url.startsWith("/remove/")) {
+            if (queryName.equals("remove")) {
                 if (request.getMethod().equals("POST")) {
-                    val id = Integer.parseInt(url.substring("/remove/".length()));
+                    val id = Integer.parseInt(attribute);
                     autoService.removeById(id);
                     response.sendRedirect(rootUrl);
                     return;
@@ -92,19 +98,31 @@ public class AppRouter implements Router {
                 throw new NotFoundException();
             }
 
-            if (url.startsWith("/images/")) {
+            if (queryName.equals("images")) {
                 if (request.getMethod().equals("GET")) {
-                    val id = url.substring("/images/".length());
+                    val id = attribute;
                     fileService.readFile(id, response.getOutputStream());
                     return;
                 }
 
                 throw new NotFoundException();
             }
+
+            if (queryName.equals("search")) {
+                if (request.getMethod().equals("GET")) {
+                    val text = request.getParameter("text");
+                    val items = autoService.search(text);
+                    request.setAttribute("items", items);
+                    request.getRequestDispatcher(ResourcesPaths.searchResultsJsp).forward(request, response);
+                }
+
+                throw new NotFoundException();
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
             try {
-                request.getRequestDispatcher("/WEB-INF/404.jsp").forward(request, response);
+                request.getRequestDispatcher(ResourcesPaths.errorJsp).forward(request, response);
             } catch (ServletException | IOException ex) {
                 ex.printStackTrace();
             }
