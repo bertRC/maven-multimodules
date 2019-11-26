@@ -84,6 +84,16 @@ public class AppRouter implements Router {
                     request.getRequestDispatcher(ResourcesPaths.detailsJsp).forward(request, response);
                     return;
                 }
+                if (request.getMethod().equals("POST")) {
+                    request.setCharacterEncoding("UTF-8");
+                    val id = Integer.parseInt(attribute);
+                    val name = request.getParameter("name");
+                    val description = request.getParameter("description");
+                    val part = request.getPart("image");
+                    autoService.save(new AutoModel(id, name, description, null), part);
+                    response.sendRedirect(rootUrl);
+                    return;
+                }
 
                 throw new NotFoundException();
             }
