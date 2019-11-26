@@ -30,7 +30,10 @@ public class AutoServiceImpl implements AutoService {
             val image = fileService.writeFile(part);
             model.setImageUrl(image);
         }
-        repository.save(model);
+        String previousImageUrl = repository.save(model);
+        if (previousImageUrl != null && !previousImageUrl.isEmpty()) {
+            fileService.removeFile(previousImageUrl);
+        }
     }
 
     @Override
