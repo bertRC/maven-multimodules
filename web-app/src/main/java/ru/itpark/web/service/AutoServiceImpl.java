@@ -38,7 +38,11 @@ public class AutoServiceImpl implements AutoService {
 
     @Override
     public boolean removeById(int id) {
-        return fileService.removeFile(repository.removeById(id));
+        String imageUrl = repository.removeById(id);
+        if (imageUrl != null && !imageUrl.isEmpty()) {
+            return fileService.removeFile(imageUrl);
+        }
+        return false;
     }
 
     @Override
