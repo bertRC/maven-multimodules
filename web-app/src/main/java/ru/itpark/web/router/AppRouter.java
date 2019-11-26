@@ -59,7 +59,7 @@ public class AppRouter implements Router {
                 if (request.getMethod().equals("POST")) {
                     val name = request.getParameter("name");
                     val part = request.getPart("image");
-                    autoService.save(new AutoModel(0, name, null), part);
+                    autoService.save(new AutoModel(0, name, null, null), part);
                     response.sendRedirect(rootUrl);
                     return;
                 }
