@@ -77,13 +77,26 @@ public class AutoRepositoryJdbcImpl implements AutoRepository {
         }
     }
 
+    public Optional<String> getImageUrl(int id) {
+        try {
+            return template.<String>queryForObject(ds, "SELECT imageUrl FROM autos WHERE id = ?;", stmt -> {
+                stmt.setInt(1, id);
+                return stmt;
+            }, rs -> rs.getString("imageUrl"));
+        } catch (SQLException e) {
+            throw new DataAccessException(e);
+        }
+    }
+
     @Override
-    public void removeById(int id) {
+    public String removeById(int id) {
+        String imageUrl = getImageUrl(id).orElse(null);
         try {
             template.update(ds, "DELETE FROM autos WHERE id = ?;", stmt -> {
                 stmt.setInt(1, id);
                 return stmt;
             });
+            return imageUrl;
         } catch (SQLException e) {
             throw new DataAccessException(e);
         }

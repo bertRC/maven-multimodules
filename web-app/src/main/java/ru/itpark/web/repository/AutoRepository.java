@@ -12,5 +12,5 @@ public interface AutoRepository {
 
     void save(AutoModel model);
 
-    void removeById(int id);
+    String removeById(int id);
 }
