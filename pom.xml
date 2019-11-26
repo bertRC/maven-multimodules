@@ -15,7 +15,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <front-controller.version>1.1</front-controller.version>
         <jdbc-template.version>1.1</jdbc-template.version>
-        <web-app.version>1.0</web-app.version>
+        <web-app.version>1.1</web-app.version>
         <javax.servlet-api.version>4.0.1</javax.servlet-api.version>
         <javax.servlet.jsp-api.version>2.3.3</javax.servlet.jsp-api.version>
         <webapp-runner.version>9.0.27.1</webapp-runner.version>
