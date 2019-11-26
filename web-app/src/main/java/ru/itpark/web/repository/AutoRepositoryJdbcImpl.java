@@ -19,6 +19,7 @@ public class AutoRepositoryJdbcImpl implements AutoRepository {
             rs.getString("description"),
             rs.getString("imageUrl")
     );
+    public static final int minTextLength = 3;
 
     public AutoRepositoryJdbcImpl(DataSource ds, JdbcTemplate template) {
         this.ds = ds;
@@ -97,6 +98,23 @@ public class AutoRepositoryJdbcImpl implements AutoRepository {
                 return stmt;
             });
             return imageUrl;
+        } catch (SQLException e) {
+            throw new DataAccessException(e);
+        }
+    }
+
+    @Override
+    public List<AutoModel> search(String text) {
+        if (text.length() < minTextLength) {
+            throw new IllegalArgumentException("Text must contain at least 3 characters");
+        }
+        try {
+            return template.queryForList(ds, "SELECT id, name, description, imageUrl FROM autos WHERE name LIKE ? OR description LIKE ?;",
+                    mapper, stmt -> {
+                        stmt.setString(1, "%" + text + "%");
+                        stmt.setString(2, "%" + text + "%");
+                        return stmt;
+                    });
         } catch (SQLException e) {
             throw new DataAccessException(e);
         }

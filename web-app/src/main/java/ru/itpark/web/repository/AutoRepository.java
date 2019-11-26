@@ -13,4 +13,6 @@ public interface AutoRepository {
     void save(AutoModel model);
 
     String removeById(int id);
+
+    List<AutoModel> search(String text);
 }
