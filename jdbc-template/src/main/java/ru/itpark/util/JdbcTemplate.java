@@ -1,6 +1,5 @@
 package ru.itpark.util;
 
-
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.LinkedList;
@@ -57,7 +56,7 @@ public class JdbcTemplate {
     }
 
     public <T> T updateForId(DataSource dataSource, String query) throws SQLException {
-        return executeWitId(dataSource, query);
+        return executeWithId(dataSource, query);
     }
 
     public <T> T updateForId(DataSource dataSource, String query, PreparedStatementSetter setter) throws SQLException {
@@ -102,7 +101,7 @@ public class JdbcTemplate {
         }
     }
 
-    private <T> T executeWitId(DataSource dataSource, String query) throws SQLException {
+    private <T> T executeWithId(DataSource dataSource, String query) throws SQLException {
         try (
                 Connection connection = dataSource.getConnection();
                 PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
