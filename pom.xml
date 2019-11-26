@@ -6,14 +6,14 @@
 
     <groupId>ru.itpark</groupId>
     <artifactId>multimodule</artifactId>
-    <version>1.0</version>
+    <version>1.0.1</version>
     <packaging>pom</packaging>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <front-controller.version>1.0</front-controller.version>
+        <front-controller.version>1.1</front-controller.version>
         <jdbc-template.version>1.0</jdbc-template.version>
         <web-app.version>1.0</web-app.version>
         <javax.servlet-api.version>4.0.1</javax.servlet-api.version>

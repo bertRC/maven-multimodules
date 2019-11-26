@@ -10,7 +10,7 @@
     <parent>
         <groupId>ru.itpark</groupId>
         <artifactId>multimodule</artifactId>
-        <version>1.0</version>
+        <version>1.0.1</version>
     </parent>
 
 </project>
