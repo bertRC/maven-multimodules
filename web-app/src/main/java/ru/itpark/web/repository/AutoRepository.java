@@ -10,7 +10,7 @@ public interface AutoRepository {
 
     Optional<AutoModel> getById(int id);
 
-    void save(AutoModel model);
+    String save(AutoModel model);
 
     String removeById(int id);
 

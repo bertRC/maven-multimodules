@@ -54,7 +54,7 @@ public class AutoRepositoryJdbcImpl implements AutoRepository {
     }
 
     @Override
-    public void save(AutoModel model) {
+    public String save(AutoModel model) {
         try {
             if (model.getId() == 0) {
                 int id = template.<Integer>updateForId(ds, "INSERT INTO autos(name, description, imageUrl) VALUES (?, ?, ?);", stmt -> {
@@ -64,7 +64,9 @@ public class AutoRepositoryJdbcImpl implements AutoRepository {
                     return stmt;
                 });
                 model.setId(id);
+                return null;
             } else {
+                String imageUrl = getImageUrl(model.getId()).orElse(null);
                 template.update(ds, "UPDATE autos SET name = ?, description = ?, imageUrl = ? WHERE id = ?;", stmt -> {
                     stmt.setString(1, model.getName());
                     stmt.setString(2, model.getDescription());
@@ -72,6 +74,7 @@ public class AutoRepositoryJdbcImpl implements AutoRepository {
                     stmt.setInt(4, model.getId());
                     return stmt;
                 });
+                return imageUrl;
             }
         } catch (SQLException e) {
             throw new DataAccessException(e);
