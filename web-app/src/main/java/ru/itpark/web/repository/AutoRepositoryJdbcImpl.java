@@ -16,6 +16,7 @@ public class AutoRepositoryJdbcImpl implements AutoRepository {
     private final RowMapper<AutoModel> mapper = rs -> new AutoModel(
             rs.getInt("id"),
             rs.getString("name"),
+            rs.getString("description"),
             rs.getString("imageUrl")
     );
 
@@ -24,7 +25,7 @@ public class AutoRepositoryJdbcImpl implements AutoRepository {
         this.template = template;
 
         try {
-            template.update(ds, "CREATE TABLE IF NOT EXISTS autos (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, imageUrl TEXT);");
+            template.update(ds, "CREATE TABLE IF NOT EXISTS autos (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, description TEXT, imageUrl TEXT);");
         } catch (SQLException e) {
             throw new DataAccessException(e);
         }
@@ -33,7 +34,7 @@ public class AutoRepositoryJdbcImpl implements AutoRepository {
     @Override
     public List<AutoModel> getAll() {
         try {
-            return template.queryForList(ds, "SELECT id, name, imageUrl FROM autos;", mapper);
+            return template.queryForList(ds, "SELECT id, name, description, imageUrl FROM autos;", mapper);
         } catch (SQLException e) {
             throw new DataAccessException(e);
         }
@@ -42,7 +43,10 @@ public class AutoRepositoryJdbcImpl implements AutoRepository {
     @Override
     public Optional<AutoModel> getById(int id) {
         try {
-            return template.queryForObject(ds, "SELECT id, name, imageUrl FROM autos;", mapper);
+            return template.queryForObject(ds, "SELECT id, name, description, imageUrl FROM autos WHERE id = ?;", stmt -> {
+                stmt.setInt(1, id);
+                return stmt;
+            }, mapper);
         } catch (SQLException e) {
             throw new DataAccessException(e);
         }
@@ -52,17 +56,19 @@ public class AutoRepositoryJdbcImpl implements AutoRepository {
     public void save(AutoModel model) {
         try {
             if (model.getId() == 0) {
-                int id = template.<Integer>updateForId(ds, "INSERT INTO autos(name, imageUrl) VALUES (?, ?);", stmt -> {
+                int id = template.<Integer>updateForId(ds, "INSERT INTO autos(name, description, imageUrl) VALUES (?, ?, ?);", stmt -> {
                     stmt.setString(1, model.getName());
-                    stmt.setString(2, model.getImageUrl());
+                    stmt.setString(2, model.getDescription());
+                    stmt.setString(3, model.getImageUrl());
                     return stmt;
                 });
                 model.setId(id);
             } else {
-                template.update(ds, "UPDATE autos SET name = ?, imageUrl = ? WHERE id = ?;", stmt -> {
+                template.update(ds, "UPDATE autos SET name = ?, description = ?, imageUrl = ? WHERE id = ?;", stmt -> {
                     stmt.setString(1, model.getName());
-                    stmt.setString(2, model.getImageUrl());
-                    stmt.setInt(3, model.getId());
+                    stmt.setString(2, model.getDescription());
+                    stmt.setString(3, model.getImageUrl());
+                    stmt.setInt(4, model.getId());
                     return stmt;
                 });
             }
