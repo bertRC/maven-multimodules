@@ -1,5 +1,6 @@
 <%@ page import="java.util.List" %>
 <%@ page import="ru.itpark.web.model.AutoModel" %>
+<%@ page import="ru.itpark.web.repository.AutoRepositoryJdbcImpl" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -12,6 +13,10 @@
         <div class="col">
             <h1>Catalog</h1>
 
+            <form class="mt-3" action="<%= request.getContextPath() %>/search/">
+                <input name="text" class="form-control" type="search" placeholder="Search" pattern=".{<%= AutoRepositoryJdbcImpl.minTextLength %>,}" required title="3 characters minimum">
+            </form>
+
             <div class="row">
                 <% if (request.getAttribute("items") != null) { %>
                 <% for (AutoModel item : (List<AutoModel>) request.getAttribute("items")) { %>
@@ -23,6 +28,8 @@
                         <div class="card-body">
                             <h5 class="card-title"><%= item.getName() %>
                             </h5>
+                            <p class="card-text"><%= item.getDescription()%>
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -34,6 +41,11 @@
                 <div class="form-group">
                     <label for="name">Auto Name</label>
                     <input type="text" id="name" name="name" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea name="description" class="form-control" id="description" placeholder="Auto description" required></textarea>
                 </div>
 
                 <div class="custom-file">
