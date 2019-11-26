@@ -1,4 +1,3 @@
-<%@ page import="java.util.List" %>
 <%@ page import="ru.itpark.web.model.AutoModel" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -22,6 +21,8 @@
                         <div class="card-body">
                             <h5 class="card-title"><%= item.getName() %>
                             </h5>
+                            <p class="card-text"><%= item.getDescription()%>
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -30,6 +31,11 @@
             <form action="<%= request.getContextPath() %>/remove/<%= item.getId() %>" method="post" class="mt-3">
                 <button type="submit" class="btn btn-primary mt-3">Remove</button>
             </form>
+
+            <form class="mt-3">
+                <a href="/" class="btn btn-secondary btn-sm active" role="button" aria-pressed="true">Return to Homepage</a>
+            </form>
+
             <% } %>
         </div>
     </div>
