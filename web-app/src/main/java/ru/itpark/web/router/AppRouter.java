@@ -9,6 +9,7 @@ import ru.itpark.web.model.AutoModel;
 import ru.itpark.web.repository.AutoRepositoryJdbcImpl;
 import ru.itpark.web.service.AutoService;
 import ru.itpark.web.service.AutoServiceImpl;
+import ru.itpark.web.service.FileService;
 import ru.itpark.web.service.FileServiceImpl;
 import ru.itpark.web.util.ResourcesPaths;
 
@@ -23,7 +24,7 @@ import java.util.regex.Pattern;
 
 public class AppRouter implements Router {
     private AutoService autoService;
-    private FileServiceImpl fileService;
+    private FileService fileService;
 
     public static final Pattern urlPattern = Pattern.compile("^/(.+)/(.*)$");
 
