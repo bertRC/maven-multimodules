@@ -49,7 +49,7 @@
                 </div>
 
                 <div class="custom-file">
-                    <input type="file" id="file" name="image" class="custom-file-input" accept="image/*" required>
+                    <input type="file" id="file" name="image" class="custom-file-input" accept="image/*">
                     <label class="custom-file-label" for="file">Choose image...</label>
                 </div>
 
