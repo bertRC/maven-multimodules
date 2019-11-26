@@ -34,8 +34,12 @@ public class AutoServiceImpl implements AutoService {
     }
 
     @Override
-    public void removeById(int id) {
-        // TODO: забиваем на удаление картинок
-        repository.removeById(id);
+    public boolean removeById(int id) {
+        return fileService.removeFile(repository.removeById(id));
+    }
+
+    @Override
+    public List<AutoModel> search(String text) {
+        return null;
     }
 }
