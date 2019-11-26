@@ -1,10 +1,8 @@
 package ru.itpark.web;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
 import java.util.ServiceLoader;
 import java.util.stream.Collectors;
@@ -14,7 +12,7 @@ public class FrontController extends HttpServlet {
     private Router router;
 
     @Override
-    public void init() throws ServletException {
+    public void init() {
         final List<Router> routes = StreamSupport.stream(ServiceLoader.load(Router.class).spliterator(), false)
                 .collect(Collectors.toList());
 
@@ -31,7 +29,7 @@ public class FrontController extends HttpServlet {
     }
 
     @Override
-    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void service(HttpServletRequest req, HttpServletResponse resp) {
         log("service");
         router.route(req, resp);
     }
