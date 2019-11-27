@@ -54,7 +54,7 @@ public class AutoRepositoryJdbcImpl implements AutoRepository {
     }
 
     @Override
-    public String save(AutoModel model) {
+    public void save(AutoModel model) {
         try {
             if (model.getId() == 0) {
                 int id = template.<Integer>updateForId(ds, "INSERT INTO autos(name, description, imageUrl) VALUES (?, ?, ?);", stmt -> {
@@ -64,12 +64,7 @@ public class AutoRepositoryJdbcImpl implements AutoRepository {
                     return stmt;
                 });
                 model.setId(id);
-                return null;
             } else {
-                String previousImageUrl = getImageUrl(model.getId()).orElse(null);
-                if (model.getImageUrl() == null) {
-                    model.setImageUrl(previousImageUrl);
-                }
                 template.update(ds, "UPDATE autos SET name = ?, description = ?, imageUrl = ? WHERE id = ?;", stmt -> {
                     stmt.setString(1, model.getName());
                     stmt.setString(2, model.getDescription());
@@ -77,7 +72,6 @@ public class AutoRepositoryJdbcImpl implements AutoRepository {
                     stmt.setInt(4, model.getId());
                     return stmt;
                 });
-                return previousImageUrl;
             }
         } catch (SQLException e) {
             throw new DataAccessException(e);
@@ -96,14 +90,12 @@ public class AutoRepositoryJdbcImpl implements AutoRepository {
     }
 
     @Override
-    public String removeById(int id) {
-        String imageUrl = getImageUrl(id).orElse(null);
+    public void removeById(int id) {
         try {
             template.update(ds, "DELETE FROM autos WHERE id = ?;", stmt -> {
                 stmt.setInt(1, id);
                 return stmt;
             });
-            return imageUrl;
         } catch (SQLException e) {
             throw new DataAccessException(e);
         }
