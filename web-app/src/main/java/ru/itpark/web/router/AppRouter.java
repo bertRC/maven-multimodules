@@ -35,6 +35,14 @@ public class AppRouter implements Router {
             val uploadPath = System.getenv(ResourcesPaths.uploadPath);
             fileService = new FileServiceImpl(uploadPath);
             autoService = new AutoServiceImpl(new AutoRepositoryJdbcImpl(dataSource, new JdbcTemplate()), fileService);
+
+            //Demo data initialization
+            AutoModel kopeykaAuto = new AutoModel(0, "ВАЗ-2101", "Автомобиль, выпускавшийся АвтоВАЗом, представлен в 1970 году.", "VAZ-2103-DEMO");
+            AutoModel moskvitchAuto = new AutoModel(0, "Москвич-412", "Автомобиль, выпускавшийся с 1967 по 1977 на заводе МЗМА (АЗЛК) и с 1967 по 1999 на автозаводе в Ижевске.", "MOSKVITCH-412-DEMO");
+            autoService.save(kopeykaAuto, null);
+            autoService.save(moskvitchAuto, null);
+            fileService.copyFileFromUrl("https://sun9-3.userapi.com/c857216/v857216796/66d14/xVq-eHIvPrU.jpg", "VAZ-2103-DEMO");
+            fileService.copyFileFromUrl("https://sun9-36.userapi.com/c857216/v857216796/66d0d/i2nKfr2jif4.jpg", "MOSKVITCH-412-DEMO");
         } catch (NamingException e) {
             throw new InitializationException(e);
         }
