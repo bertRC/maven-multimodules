@@ -12,7 +12,7 @@ public interface AutoService {
 
     void save(AutoModel model, Part part);
 
-    boolean removeById(int id);
+    void removeById(int id);
 
     List<AutoModel> search(String text);
 }
