@@ -45,7 +45,7 @@
 
                 <div class="form-group">
                     <label for="description">Description</label>
-                    <textarea name="description" class="form-control" id="description" placeholder="Auto description"></textarea>
+                    <textarea name="description" class="form-control" id="description" placeholder="Auto description (optional)"></textarea>
                 </div>
 
                 <div class="custom-file">
