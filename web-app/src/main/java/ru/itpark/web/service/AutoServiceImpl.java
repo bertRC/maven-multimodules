@@ -27,22 +27,27 @@ public class AutoServiceImpl implements AutoService {
     @Override
     public void save(AutoModel model, Part part) {
         if (part != null) {
-            val image = fileService.writeFile(part);
+            val fileName = part.getSubmittedFileName();
+            String image;
+            if (fileName.isEmpty()) {
+                image = repository.getImageUrl(model.getId()).orElse(null);
+            } else {
+                image = fileService.writeFile(part);
+                if (model.getId() > 0) {
+                    val previousImage = repository.getImageUrl(model.getId()).orElse(null);
+                    fileService.removeFile(previousImage);
+                }
+            }
             model.setImageUrl(image);
         }
-        val previousImageUrl = repository.save(model);
-        if (part != null && previousImageUrl != null && !previousImageUrl.isEmpty()) {
-            fileService.removeFile(previousImageUrl);
-        }
+        repository.save(model);
     }
 
     @Override
     public void removeById(int id) {
         val imageUrl = repository.getImageUrl(id).orElse(null);
         repository.removeById(id);
-        if (imageUrl != null) {
-            fileService.removeFile(imageUrl);
-        }
+        fileService.removeFile(imageUrl);
     }
 
     @Override
