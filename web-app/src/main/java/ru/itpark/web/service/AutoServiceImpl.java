@@ -37,12 +37,12 @@ public class AutoServiceImpl implements AutoService {
     }
 
     @Override
-    public boolean removeById(int id) {
-        String imageUrl = repository.removeById(id);
-        if (imageUrl != null && !imageUrl.isEmpty()) {
-            return fileService.removeFile(imageUrl);
+    public void removeById(int id) {
+        val imageUrl = repository.getImageUrl(id).orElse(null);
+        repository.removeById(id);
+        if (imageUrl != null) {
+            fileService.removeFile(imageUrl);
         }
-        return false;
     }
 
     @Override
