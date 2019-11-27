@@ -8,7 +8,6 @@ import java.util.Optional;
 
 public class JdbcTemplate {
     public <T> List<T> queryForList(DataSource dataSource, String query, RowMapper<T> mapper) throws SQLException {
-        // нужно cast'ить, т.к. в противном случае компилятор не догадается, какой из методов мы вызваем
         return execute(dataSource, query, (Executable<List<T>>) resultSet -> {
             List<T> list = new LinkedList<>();
             while (resultSet.next()) {
@@ -51,7 +50,6 @@ public class JdbcTemplate {
     }
 
     public int update(DataSource dataSource, String query, PreparedStatementSetter setter) throws SQLException {
-        // а тут не надо, т.к. он и так видит тип
         return execute(dataSource, query, setter);
     }
 
