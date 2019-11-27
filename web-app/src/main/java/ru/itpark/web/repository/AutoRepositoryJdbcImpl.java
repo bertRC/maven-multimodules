@@ -81,7 +81,7 @@ public class AutoRepositoryJdbcImpl implements AutoRepository {
     @Override
     public Optional<String> getImageUrl(int id) {
         try {
-            return template.<String>queryForObject(ds, "SELECT imageUrl FROM autos WHERE id = ?;", stmt -> {
+            return template.queryForObject(ds, "SELECT imageUrl FROM autos WHERE id = ?;", stmt -> {
                 stmt.setInt(1, id);
                 return stmt;
             }, rs -> rs.getString("imageUrl"));
