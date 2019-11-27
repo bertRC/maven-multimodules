@@ -37,8 +37,8 @@ public class AppRouter implements Router {
             autoService = new AutoServiceImpl(new AutoRepositoryJdbcImpl(dataSource, new JdbcTemplate()), fileService);
 
             //Demo data initialization
-            AutoModel kopeykaAuto = new AutoModel(0, "ВАЗ-2101", "Автомобиль, выпускавшийся АвтоВАЗом, представлен в 1970 году.", "VAZ-2103-DEMO");
-            AutoModel moskvitchAuto = new AutoModel(0, "Москвич-412", "Автомобиль, выпускавшийся с 1967 по 1977 на заводе МЗМА (АЗЛК) и с 1967 по 1999 на автозаводе в Ижевске.", "MOSKVITCH-412-DEMO");
+            AutoModel kopeykaAuto = new AutoModel(0, "VAZ-2101", "", "VAZ-2103-DEMO");
+            AutoModel moskvitchAuto = new AutoModel(0, "Moskvitch-412", "", "MOSKVITCH-412-DEMO");
             autoService.save(kopeykaAuto, null);
             autoService.save(moskvitchAuto, null);
             fileService.copyFileFromUrl("https://sun9-3.userapi.com/c857216/v857216796/66d14/xVq-eHIvPrU.jpg", "VAZ-2103-DEMO");
