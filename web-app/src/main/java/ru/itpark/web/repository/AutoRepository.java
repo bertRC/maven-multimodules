@@ -12,6 +12,8 @@ public interface AutoRepository {
 
     void save(AutoModel model);
 
+    Optional<String> getImageUrl(int id);
+
     void removeById(int id);
 
     List<AutoModel> search(String text);
