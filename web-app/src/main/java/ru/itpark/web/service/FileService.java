@@ -8,5 +8,7 @@ public interface FileService {
 
     String writeFile(Part part);
 
+    void copyFileFromUrl(String url, String name);
+
     boolean removeFile(String id);
 }
