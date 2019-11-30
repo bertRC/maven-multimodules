@@ -41,8 +41,8 @@ public class AppRouter implements Router {
             AutoModel moskvitchAuto = new AutoModel(0, "Moskvitch-412", "", "MOSKVITCH-412-DEMO");
             autoService.save(kopeykaAuto, null);
             autoService.save(moskvitchAuto, null);
-            fileService.copyFileFromUrl("https://sun9-3.userapi.com/c857216/v857216796/66d14/xVq-eHIvPrU.jpg", "VAZ-2103-DEMO");
-            fileService.copyFileFromUrl("https://sun9-36.userapi.com/c857216/v857216796/66d0d/i2nKfr2jif4.jpg", "MOSKVITCH-412-DEMO");
+//            fileService.copyFileFromUrl("https://sun9-3.userapi.com/c857216/v857216796/66d14/xVq-eHIvPrU.jpg", "VAZ-2103-DEMO");
+//            fileService.copyFileFromUrl("https://sun9-36.userapi.com/c857216/v857216796/66d0d/i2nKfr2jif4.jpg", "MOSKVITCH-412-DEMO");
         } catch (NamingException e) {
             throw new InitializationException(e);
         }
