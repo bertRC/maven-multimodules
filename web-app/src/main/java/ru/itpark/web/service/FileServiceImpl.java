@@ -58,6 +58,15 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
+    public void copyFile(String source, String destination) {
+        try {
+            Files.copy(Paths.get(source), Paths.get(uploadPath).resolve(destination), REPLACE_EXISTING);
+        } catch (IOException e) {
+            throw new FileAccessException(e);
+        }
+    }
+
+    @Override
     public boolean removeFile(String id) {
         try {
             val path = Paths.get(uploadPath).resolve(id);

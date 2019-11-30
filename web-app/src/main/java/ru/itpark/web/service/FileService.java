@@ -10,5 +10,7 @@ public interface FileService {
 
     void copyFileFromUrl(String url, String name);
 
+    void copyFile(String source, String destination);
+
     boolean removeFile(String id);
 }
