@@ -1,6 +1,4 @@
 /out/
-upload/
-!upload/.gitkeep
 /target/
 /apache-tomcat*
 !.mvn/wrapper/maven-wrapper.jar
